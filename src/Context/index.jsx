@@ -2,8 +2,31 @@ import { createContext, useEffect, useState } from 'react'
 
 export const ShoppingCartContext = createContext()
 
+export const initializeLocalStorage = () => {
+  const accountInLocalStorage = localStorage.getItem('account')
+  const signOutInLocalStorage = localStorage.getItem('sign-out')
+  let parsedAccount
+  let parsedSignOut
+
+  if (!accountInLocalStorage) {
+    localStorage.setItem('account', JSON.stringify({}))
+    parsedAccount = {}
+  } else {
+    parsedAccount = JSON.parse(accountInLocalStorage)
+  }
+
+  if (!signOutInLocalStorage) {
+    localStorage.setItem('sign-out', JSON.stringify(false))
+    parsedSignOut = false
+  } else {
+    parsedSignOut = JSON.parse(signOutInLocalStorage)
+
+  }
+}
+
 // eslint-disable-next-line react/prop-types
 export const ShoppingCartProvider = ({ children }) => {
+  const [account, setAccount] = useState({})
   const [cartProducts, setCartProducts] = useState([])
   const [count, setCount] = useState(0)
   const [filteredProducts, setFilteredProducts] = useState([])
@@ -14,6 +37,7 @@ export const ShoppingCartProvider = ({ children }) => {
   const [products, setProducts] = useState([])
   const [searchByCategory, setSearchByCategory] = useState(null)
   const [searchByTitle, setSearchByTitle] = useState(null)
+  const [signOut, setSignOut] = useState(false)
 
   useEffect(() => {
     fetch('https://api.escuelajs.co/api/v1/products').
@@ -68,6 +92,7 @@ export const ShoppingCartProvider = ({ children }) => {
 
   return (
     <ShoppingCartContext.Provider value={{
+      account,
       cartProducts,
       count,
       filteredProducts,
@@ -78,6 +103,7 @@ export const ShoppingCartProvider = ({ children }) => {
       products,
       searchByCategory,
       searchByTitle,
+      setAccount,
       setCartProducts,
       setCount,
       setOrder,
@@ -85,6 +111,8 @@ export const ShoppingCartProvider = ({ children }) => {
       setProducts,
       setSearchByCategory,
       setSearchByTitle,
+      setSignOut,
+      signOut,
       closeCheckoutSideMenu,
       closeProductDetail,
       filteredProductsByTitle,

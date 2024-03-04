@@ -66,7 +66,7 @@ const Card = ({ product }) => {
           alt={product.title}/>
         {renderIcon()}
       </figure>
-      <p className="flex justify-between">
+      <p className="flex justify-between items-center">
         <span className="text-sm font-light">{product.title}</span>
         <span className="text-lg font-medium">${product.price}</span>
       </p>
